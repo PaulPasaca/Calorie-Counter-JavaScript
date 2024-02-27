@@ -134,8 +134,8 @@ function calculateCalories(e) {
   <p>${exerciseCalories} Calories Burned</p>
   `;
 
-
-
+  output.classList.remove('hide');
+}
 /**
  * Función que obtenga el recuento de calorías de las 
  * entradas del usuario.
@@ -150,21 +150,50 @@ function getCaloriesFromInputs(list) {
 
     if (invalidInputMatch) {
       // AQUI UN EJEMPLO DE PLANTILLA LITERAL O template literal, 
-      alert(`Invalid Input: ${invalidInputMatch[0]}`);
-      isError = true;
-      return null;
-    }
-
-    /**
+      if (invalidInputMatch) {
+        alert(`Invalid Input: ${invalidInputMatch[0]}`);
+        isError = true;
+        return null;
+      }
+      /**
      * El constructor Number es una función que convierte un valor en un número. 
      * Si el valor no se puede convertir, devuelve NaN, que significa "Not a Number" 
      * (no es un número).
 
      */
+    }
     calories += Number(currVal);
-
   }
   return calories;
 }
 
+
+
+function clearForm() {
+  const inputContainers = Array.from(document.querySelectorAll('.input-container'));
+
+  for (const container of inputContainers) {
+    // recorre todo el arreglo de los inputs y los borra
+    container.innerHTML = '';
+
+  }
+  // limpia el budgetNumberInput
+  budgetNumberInput.value = '';
+  /**
+   * La diferencia entre innerText e innerHTML es que innerText no renderizará los elementos
+   *  HTML, sino que mostrará las etiquetas y el contenido como texto sin formato.
+   */
+  output.innerText = '';
+  /**
+   *Restaurar la clase hide al elemento de salida.La propiedad classList tiene un método .add() 
+   que es el opuesto al método .remove().Acepta una cadena que representa la clase a añadir al 
+   elemento.
+
+   */
+  output.classList.add('hide');
+
+}
+
 addEntryButton.addEventListener("click", addEntry);
+calorieCounter.addEventListener("submit", calculateCalories);
+clearButton.addEventListener("click", clearForm);
