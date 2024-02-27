@@ -1,10 +1,10 @@
 
-const calorieCounter = document.getElementById('calorie-counter');
-const budgetNumberInput = document.getElementById('budget');
-const entryDropdown = document.getElementById('entry-dropdown');
-const addEntryButton = document.getElementById('add-entry');
-const clearButton = document.getElementById('clear');
-const output = document.getElementById('output');
+const contadorCalorias = document.getElementById('contador-calorias');
+const in_Estimacion = document.getElementById('estimacion');
+const entradaDesplegable = document.getElementById('entrada-desplegable');
+const btn_añadirEntrada = document.getElementById('añadir-entrada');
+const btn_limpiar = document.getElementById('limpiar');
+const salida = document.getElementById('salida');
 let isError = false;
 
 
@@ -52,7 +52,7 @@ function isInvalidInput(str) {
 }
 
 //++++++++++Permitir a los usuarios añadir entradas al contador de calorías.++++++++++
-function addEntry() {
+function añadirEntrada() {
   // Puedes utilizar la propiedad value para obtener el valor de la opción seleccionada.
   //const targetId = '#' + entryDropdown.value;
   //Ahora necesitas apuntar al elemento .input-container dentro del elemento que tiene tu targetId
@@ -67,7 +67,7 @@ function addEntry() {
 
   */
 
-  const targetInputContainer = document.querySelector(`#${entryDropdown.value} .input-container`);
+  const targetInputContainer = document.querySelector(`#${entradaDesplegable.value} .input-container`);
   /**El método querySelectorAll() devuelve un NodeList de todos los elementos que coinciden con 
    * el selector. Un NodeList es un objeto similar a un array, por lo que puede acceder a los
    *  elementos utilizando la notación de corchetes.
@@ -75,10 +75,10 @@ function addEntry() {
   const entryNumber = targetInputContainer.querySelectorAll('input[type="text"]').length + 1;
   // Declara una nueva variable HTMLString, y asígnale una cadena literal de plantilla vacía.
   const HTMLString = `
-  <label for="${entryDropdown.value}-${entryNumber}-name">Entry ${entryNumber} Name</label>
-  <input type="text" id="${entryDropdown.value}-${entryNumber}-name" placeholder="Name" />
-  <label for="${entryDropdown.value}-${entryNumber}-calories">Entry ${entryNumber} Calories</label>
-  <input type="number" min="0" id="${entryDropdown.value}-${entryNumber}-calories" placeholder="Calories"/>
+  <label for="${entradaDesplegable.value}-${entryNumber}-name">Entrada ${entryNumber} Nombre</label>
+  <input type="text" id="${entradaDesplegable.value}-${entryNumber}-name" placeholder="Nombre" />
+  <label for="${entradaDesplegable.value}-${entryNumber}-calories">Entrada ${entryNumber} Calorias</label>
+  <input type="number" min="0" id="${entradaDesplegable.value}-${entryNumber}-calories" placeholder="Calorias"/>
   
   `;
   //La propiedad innerHTML establece o devuelve el contenido HTML dentro de un elemento.
@@ -100,48 +100,48 @@ function addEntry() {
  * defecto usando el método preventDefault() de tu parámetro e.
  * 
  */
-function calculateCalories(e) {
+function calcularCalorias(e) {
 
   e.preventDefault();
   isError = false;
 
-  const breakfastNumberInputs = document.querySelectorAll('#breakfast input[type=number]');
-  const lunchNumberInputs = document.querySelectorAll('#lunch input[type=number]');
-  const dinnerNumberInputs = document.querySelectorAll('#dinner input[type=number]');
-  const snacksNumberInputs = document.querySelectorAll('#snacks input[type=number]');
-  const exerciseNumberInputs = document.querySelectorAll('#exercise input[type=number]');
+  const in_desayunoNum = document.querySelectorAll('#desayuno input[type=number]');
+  const in_almuerzoNum = document.querySelectorAll('#almuerzo input[type=number]');
+  const in_cenaNum = document.querySelectorAll('#cena input[type=number]');
+  const in_snacksNum = document.querySelectorAll('#snacks input[type=number]');
+  const in_ejercicioNum = document.querySelectorAll('#ejercicio input[type=number]');
 
-  const breakfastCalories = getCaloriesFromInputs(breakfastNumberInputs);
-  const lunchCalories = getCaloriesFromInputs(lunchNumberInputs);
-  const dinnerCalories = getCaloriesFromInputs(dinnerNumberInputs);
-  const snacksCalories = getCaloriesFromInputs(snacksNumberInputs);
-  const exerciseCalories = getCaloriesFromInputs(exerciseNumberInputs);
-  const budgetCalories = getCaloriesFromInputs([budgetNumberInput]);
+  const caloriasDesayuno = obtenerCaloriasInputs(in_desayunoNum);
+  const caloriasAlmuerzo = obtenerCaloriasInputs(in_almuerzoNum);
+  const caloriasCena = obtenerCaloriasInputs(in_cenaNum);
+  const caloriasSnacks = obtenerCaloriasInputs(in_snacksNum);
+  const caloriasEjercicio = obtenerCaloriasInputs(in_ejercicioNum);
+  const caloriasEstimacion = obtenerCaloriasInputs([in_Estimacion]);
 
   if (isError) {
     return;
   }
 
-  const consumedCalories = breakfastCalories + lunchCalories + dinnerCalories + snacksCalories;
-  const remainingCalories = budgetCalories - consumedCalories + exerciseCalories;
-  const surplusOrDeficit = remainingCalories < 0 ? 'Surplus' : 'Deficit';
+  const caloriasConsumidas = caloriasDesayuno + caloriasAlmuerzo + caloriasCena + caloriasSnacks;
+  const caloríasRestantes = caloriasEstimacion - caloriasConsumidas + caloriasEjercicio;
+  const surplusOrDeficit = caloríasRestantes < 0 ? 'Surplus' : 'Deficit';
   //Math.abs DEVUELVE UN VALOR ABSOLUTO 
-  output.innerHTML = `
-  <span class="${surplusOrDeficit.toLowerCase()}">${Math.abs(remainingCalories)} Calorie ${surplusOrDeficit}</span>
+  salida.innerHTML = `
+  <span class="${surplusOrDeficit.toLowerCase()}">${Math.abs(caloríasRestantes)} Calorias ${surplusOrDeficit}</span>
   <hr>
-  <p>${budgetCalories} Calories Budgeted</p>
-  <p>${consumedCalories} Calories Consumed</p>
-  <p>${exerciseCalories} Calories Burned</p>
+  <p>${caloriasEstimacion} Calorias Estimadas</p>
+  <p>${caloriasConsumidas} Calorias Consumidas</p>
+  <p>${caloriasEjercicio} Calorías Quemadas</p>
   `;
 
-  output.classList.remove('hide');
+  salida.classList.remove('hide');
 }
 /**
  * Función que obtenga el recuento de calorías de las 
  * entradas del usuario.
 
  */
-function getCaloriesFromInputs(list) {
+function obtenerCaloriasInputs(list) {
   let calories = 0;
 
   for (const item of list) {
@@ -169,7 +169,7 @@ function getCaloriesFromInputs(list) {
 
 
 
-function clearForm() {
+function limpiarFormulario() {
   const inputContainers = Array.from(document.querySelectorAll('.input-container'));
 
   for (const container of inputContainers) {
@@ -178,22 +178,22 @@ function clearForm() {
 
   }
   // limpia el budgetNumberInput
-  budgetNumberInput.value = '';
+  in_Estimacion.value = '';
   /**
    * La diferencia entre innerText e innerHTML es que innerText no renderizará los elementos
    *  HTML, sino que mostrará las etiquetas y el contenido como texto sin formato.
    */
-  output.innerText = '';
+  salida.innerText = '';
   /**
    *Restaurar la clase hide al elemento de salida.La propiedad classList tiene un método .add() 
    que es el opuesto al método .remove().Acepta una cadena que representa la clase a añadir al 
    elemento.
 
    */
-  output.classList.add('hide');
+  salida.classList.add('hide');
 
 }
 
-addEntryButton.addEventListener("click", addEntry);
-calorieCounter.addEventListener("submit", calculateCalories);
-clearButton.addEventListener("click", clearForm);
+btn_añadirEntrada.addEventListener("click", añadirEntrada);
+contadorCalorias.addEventListener("submit", calcularCalorias);
+btn_limpiar.addEventListener("click", limpiarFormulario);
